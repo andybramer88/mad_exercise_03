@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MovieAppMAD24Theme {
                 // A surface container using the 'background' color from the theme
+                // Test
                 Scaffold (
                     topBar = {
                         CenterAlignedTopAppBar(
