@@ -45,17 +45,21 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.movieappmad24.functions.MovieRow
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.getMovies
-
+import com.example.movieappmad24.ui.theme.MovieAppMAD24Theme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
+    var expanded by remember { mutableStateOf(false) }
+
     Scaffold (
         topBar = {
             CenterAlignedTopAppBar(
@@ -90,23 +94,29 @@ fun HomeScreen() {
                 )
             }
         }
-    ){ innerPadding ->
+    ){innerPadding ->
         MovieList(
             modifier = Modifier.padding(innerPadding),
-            movies = getMovies()
+            movies = getMovies(),
+            navController = navController
         )
     }
 }
 
-
 @Composable
-fun MovieList(modifier: Modifier, movies: List<Movie> = getMovies()){
+fun MovieList(modifier: Modifier,
+              movies: List<Movie> = getMovies(),
+              navController: NavController
+){
     LazyColumn(modifier = modifier) {
         items(movies) { movie ->
-            MovieRow(movie)
+            MovieRow(movie = movie){ movieId ->
+                navController.navigate("detailscreen/$movieId")
+            }
         }
     }
 }
+
 
 @Composable
 fun MovieCardHeader(imageUrl: String) {
@@ -203,3 +213,13 @@ fun MovieDetails(modifier: Modifier, movie: Movie) {
         }
     }
 }
+
+
+/*
+@Preview
+@Composable
+fun DefaultPreview(){
+    MovieAppMAD24Theme {
+        MovieList(modifier = Modifier, movies = getMovies())
+    }
+}*/
